@@ -2,12 +2,23 @@
 
 namespace App\Models;
 
+use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
     use HasFactory;
+    use Sluggable;  
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => [
+                'source' => 'title'
+            ]
+        ];
+    }
 
     // $fillable = hanya variable2 ini yg bisa di mass assign, sisanya gk boleh
     // berlaku untuk mass assignment database kyk create, update, dll
@@ -20,6 +31,10 @@ class Post extends Model
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    public function author(){
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function scopeFilter($query, array $filters){
@@ -54,7 +69,7 @@ class Post extends Model
         });
     }
 
-    public function author(){
-        return $this->belongsTo(User::class, 'user_id');
+    public function getRouteKeyName(){
+        return 'slug';
     }
 }

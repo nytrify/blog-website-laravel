@@ -22,6 +22,8 @@ class LoginController extends Controller
             "password" => ["required"]
         ]);
 
+        // jika validate lolos, maka ia akan run semua code di bawahnya
+
         if(Auth::attempt($validatedData)){
             $request->session()->regenerate();
 
